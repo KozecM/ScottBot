@@ -65,6 +65,41 @@ client.on('message', message => {
       break;
     }
   
+    case '99': {
+      brooklyn_99_quotes = [
+        'I\'m the human form of the 💯 emoji.',
+        'Bingpot!',
+        (
+            'Cool. Cool cool cool cool cool cool cool, ' +
+            'no doubt no doubt no doubt no doubt.'
+        ),
+        'Title of your sex tape.',
+        'Sarge, with all due respect, I am gonna completely ignore everything you just said.',
+        'I ate one string bean. It tasted like fish vomit. That was it for me.',
+        'The English language can not fully capture the depth and complexity of my thoughts, so I’m incorporating emojis into my speech to better express myself. Winky face.',
+        'A place where everybody knows your name is hell. You’re describing hell.',
+        'If I die, turn my tweets into a book.',
+        'Fine. but in protest, I’m walking over there extremely slowly!',
+        'Jake, why don’t you just do the right thing and jump out of a window?',
+        'I asked them if they wanted to embarrass you, and they instantly said yes.',
+        'Captain Wuntch. Good to see you. But if you’re here, who’s guarding Hades?',
+        'I’m playing Kwazy Cupcakes, I’m hydrated as hell, and I’m listening to Sheryl Crow. I’ve got my own party going on.',
+        'Anyone over the age of six celebrating a birthday should go to hell.',
+        'Captain, turn your greatest weakness into your greatest strength. Like Paris Hilton RE: her sex tape.',
+        'Jake, piece of advice: just give up. It’s the Boyle way. It’s why our family crest is a white flag.',
+        'Okay, no hard feelings, but I hate you. Not joking. Bye',
+        'Hello unsolved case. Do you bring me joy? No, because you’re boring and you’re too hard. See ya.',
+        'Great, I’d like your $8-est bottle of wine, please.',
+        'I don’t want to hang out with some stupid baby who’s never met Jake.',
+        'Nothing’s okay. Wuntch is circling me like a shark frenzied by chum. The task force turning into a career-threatening quagmire. An Internal Affairs investigation casting doubt upon my integrity. And you ask, is everything okay? I am buffeted by the winds of my foe’s enmity and cast about by the towering waves of cruel fate. Yet I, a Captain, am no longer able to command my vessel, my precinct, from my customary helm, my office. And you ask, is everything okay? I’ve worked the better part of my years on earth overcoming every prejudice and fighting for the position I hold, and now I feel it being ripped from my grasp, and with it the very essence of what defines me as a man. And you ask, is everything okay?',
+      ]
+
+      response = brooklyn_99_quotes[Math.floor(Math.random() * brooklyn_99_quotes.length)];
+      message.channel.send(response);
+
+      break;
+    }
+
     case 'test': {
       let sentence = 'brackets are useful';
       console.log(sentence);

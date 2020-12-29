@@ -24,8 +24,7 @@ bot = commands.Bot(command_prefix='#')
 #   print(f'Guild Members:\n - {members}')
 
 
-@bot.command(name='no
-')
+@bot.command(name='no')
 async def nine_nine(ctx):
     brooklyn_99_quotes = [
         'I\'m the human form of the 💯 emoji.',
