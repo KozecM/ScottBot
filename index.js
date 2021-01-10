@@ -1,6 +1,5 @@
 require('dotenv').config();
-
-console.log(process.env.DISCORD_TOKEN);
+const fs = require('fs')
 // Import the discord.js module
 const Discord = require('discord.js');
 
@@ -17,15 +16,22 @@ client.on('ready', () => {
   console.log('I am ready!');
 });
 
+
+fs.readFile('CurrentStar.txt', 'utf-8', (err, fd) => {
+  if (err) throw err
+
+
+})
+
 // Create an event listener for messages
 client.on('message', message => {
   // If the message is "ping"
-  if (message.channel.type != 'text' || message.author.bot || !message.content.startsWith('#'))
+  if (message.channel.type != 'text' || message.author.bot || !message.content.startsWith('$'))
     return;
   
   let command = message.content.split(' ')[0].slice(1);
 
-  let args = message.content.replace('#' + command, '').trim();
+  let args = message.content.replace('$' + command, '').trim();
 
 
   switch (command) {
@@ -38,8 +44,14 @@ client.on('message', message => {
       break;
   
     case 'say': {
-      let sentence = message.content.replace('#' + command, '').trim();
+      let sentence = message.content.replace('$' + command, '').trim();
       message.channel.send(sentence); 
+      break;
+    }
+
+    case 'game?': {
+      let answer = (Math.floor(Math.random()*2) == 1)? "yes" : "no";
+      message.channel.send(answer);
       break;
     }
 
@@ -60,13 +72,35 @@ client.on('message', message => {
         let person = message.content.replace('#' + command, '').trim();
         if (person.includes("<@!")) {
           person = person.split("!")[1].split(">")[0];
-          user = message.guild.member(person)
+          let user = message.guild.member(person)
           current_name = user.nickname;
 
-          if(current_name.slice(-1) != "🌟"){
-            current_name += " 🌟"
-            user.setNickname(current_name)
-          }
+          fs.readFile('CurrentStar.txt', 'utf-8', (err, data) => { 
+            if (err) throw err; 
+    
+            if(person != data){
+              message.guild.members.fetch(data)
+              .then(old_user => {
+                console.log(old_user.nickname);
+                old_user_name = old_user.nickname;
+                old_user_name = old_user_name.split("🌟")[0];
+                old_user.setNickname(old_user_name);
+                fs.writeFile('CurrentStar.txt', person, (err) => {
+                  if (err) throw err;
+                  console.log("successfully written")
+                })
+              
+              })
+              .catch(err=> {
+                console.log(err);
+              });
+
+              current_name += " 🌟"
+              user.setNickname(current_name)
+            }
+            
+            
+          })
         }
         
       }
@@ -101,6 +135,8 @@ client.on('message', message => {
         'Okay, no hard feelings, but I hate you. Not joking. Bye',
         'Hello unsolved case. Do you bring me joy? No, because you’re boring and you’re too hard. See ya.',
         'Great, I’d like your $8-est bottle of wine, please.',
+        'we\'re in a sewer I\'m gon\'st\'a talk about the turtles',
+        'Yeah I\'m gunsta Terry quit being such a Malfoy',
         'I don’t want to hang out with some stupid baby who’s never met Jake.',
         'Nothing’s okay. Wuntch is circling me like a shark frenzied by chum. The task force turning into a career-threatening quagmire. An Internal Affairs investigation casting doubt upon my integrity. And you ask, is everything okay? I am buffeted by the winds of my foe’s enmity and cast about by the towering waves of cruel fate. Yet I, a Captain, am no longer able to command my vessel, my precinct, from my customary helm, my office. And you ask, is everything okay? I’ve worked the better part of my years on earth overcoming every prejudice and fighting for the position I hold, and now I feel it being ripped from my grasp, and with it the very essence of what defines me as a man. And you ask, is everything okay?',
       ]
@@ -112,8 +148,7 @@ client.on('message', message => {
     }
 
     case 'test': {
-      let sentence = 'brackets are useful';
-      console.log(sentence);
+      console.log("test place")
       break;
     }
   }
