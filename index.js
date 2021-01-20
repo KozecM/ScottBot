@@ -60,7 +60,7 @@ client.on('message', message => {
         message.channel.send('Scott does not get to know the rules');
       }
       else{
-        response = "```Welcome to help not scott! Here are all of the commands that you need to use me: \n-ping: respond pong \n-pong: respond ping\n-say: respond with any text after the command\n-give: give a star (only scott can give a star)\n-99: random 99 quote```"
+        response = "```Welcome to help not scott! Here are all of the commands that you need to use me: \n$ping: respond pong \n$pong: respond ping\n$say: respond with any text after the command\n$give: give a star (only scott can give a star)\n$99: random 99 quote```"
         message.channel.send(response)
       }
       break;
