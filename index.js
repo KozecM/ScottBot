@@ -32,6 +32,7 @@ client.on('message', message => {
   let command = message.content.split(' ')[0].slice(1);
 
   let args = message.content.replace('$' + command, '').trim();
+  message.delete({timeout: 1000})
 
 
   switch (command) {
@@ -60,7 +61,12 @@ client.on('message', message => {
         message.channel.send('Scott does not get to know the rules');
       }
       else{
-        response = "```Welcome to help not scott! Here are all of the commands that you need to use me: \n$ping: respond pong \n$pong: respond ping\n$say: respond with any text after the command\n$give: give a star (only scott can give a star)\n$99: random 99 quote```"
+        response = "```Welcome to help not scott! Here are all of the commands that you need to use me:" + 
+          "\n$ping: respond pong \n$pong: respond ping"+
+          "\n$say: respond with any text after the command"+
+          "\n$give: give a star (only scott can give a star)"+
+          "\n$poll: start a poll takes the arguments: \"title\" \"option 1\" \"option 2\" \"option 3\""
+          "\n$99: random 99 quote```"
         message.channel.send(response)
       }
       break;
@@ -145,6 +151,36 @@ client.on('message', message => {
       message.channel.send(response);
 
       break;
+    }
+
+    case 'poll': {
+      let commands = message.content.replace('#' + command, '').trim().split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+      const channel = message.guild.channels.cache.find(ch => ch.name === "general");
+      const pollEmbed = new Discord.MessageEmbed()
+        .setColor('#B000B5');
+
+      let title = commands[1]
+      let options = commands.slice(2);
+      let alphabet = ['🇦', '🇧', '🇨', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶'];
+
+      pollEmbed.setTitle(title.split('"').join(''));
+      var num = 0;
+      for(const option in options) {
+        letter = 97 + num
+        console.log(options)
+        temp = ":regional_indicator_"+ String.fromCharCode(letter) + ":";
+        var optionString = temp + " " + options[option];
+        pollEmbed.addField(optionString, "\u200b", false);
+        num += 1;
+      }
+      
+      // channel.send(pollEmbed)
+      //   .then(message => {
+      //     for(i = 0; i<options.length; i ++){
+      //       testEmoji =alphabet[i];
+      //       message.react(testEmoji);
+      //     }
+      //   });
     }
 
     case 'test': {
