@@ -32,7 +32,7 @@ client.on('message', message => {
   let command = message.content.split(' ')[0].slice(1);
 
   let args = message.content.replace('$' + command, '').trim();
-  message.delete({timeout: 1000})
+  
 
 
   switch (command) {
@@ -75,7 +75,9 @@ client.on('message', message => {
     case 'give': {
       if(message.author.id == 316258648185765888){
         message.channel.send('Hey Scott! I\'ll add that star right now!');
-        let person = message.content.replace('#' + command, '').trim();
+        console.log(command);
+        let person = message.content.replace('$' + command, '').trim();
+        console.log(person);
         if (person.includes("<@!")) {
           person = person.split("!")[1].split(">")[0];
           let user = message.guild.member(person)
@@ -154,33 +156,36 @@ client.on('message', message => {
     }
 
     case 'poll': {
-      let commands = message.content.replace('#' + command, '').trim().split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+      message.delete({timeout: 1000})
+      let commands = message.content.replace('$' + command, '').trim().match(/\w+|"[^"]+"/g);
       const channel = message.guild.channels.cache.find(ch => ch.name === "general");
       const pollEmbed = new Discord.MessageEmbed()
         .setColor('#B000B5');
-
-      let title = commands[1]
-      let options = commands.slice(2);
+      
+      let title = commands[0]
+      let options = commands.slice(1);
       let alphabet = ['🇦', '🇧', '🇨', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶'];
 
       pollEmbed.setTitle(title.split('"').join(''));
       var num = 0;
       for(const option in options) {
         letter = 97 + num
-        console.log(options)
+        
         temp = ":regional_indicator_"+ String.fromCharCode(letter) + ":";
         var optionString = temp + " " + options[option];
         pollEmbed.addField(optionString, "\u200b", false);
         num += 1;
       }
       
-      // channel.send(pollEmbed)
-      //   .then(message => {
-      //     for(i = 0; i<options.length; i ++){
-      //       testEmoji =alphabet[i];
-      //       message.react(testEmoji);
-      //     }
-      //   });
+      channel.send(pollEmbed)
+        .then(message => {
+          for(i = 0; i<options.length; i ++){
+            testEmoji =alphabet[i];
+            message.react(testEmoji);
+          }
+        });
+
+        break;
     }
 
     case 'test': {
