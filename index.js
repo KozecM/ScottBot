@@ -1,36 +1,41 @@
 require('dotenv').config();
 const fs = require('fs')
+
 // Import the discord.js module
-const Discord = require('discord.js');
+const {Client, Intents} = require('discord.js');
+
 
 // Create an instance of a Discord client
 // This is sometimes called 'bot', but 'client' is prefered
-const client = new Discord.Client();
-
-// The token of your bot - https://discordapp.com/developers/applications/me
-const token = process.env.DISCORD_TOKEN;
+const client = new Client({
+  intents:[
+    Intents.FLAGS.GUILDS, 
+    Intents.FLAGS.GUILD_MESSAGES, 
+    Intents.FLAGS.MESSAGE_CONTENT,
+  ],
+});
 
 // The ready event is vital, it means that your bot will only start reacting to information
 // from Discord after ready is emitted
-client.on('ready', () => {
-  console.log('I am ready!');
-});
+client.once("ready", () =>{
+  console.log("I am ready!")
+})
 
 
 fs.readFile('CurrentStar.txt', 'utf-8', (err, fd) => {
   if (err) throw err
-
-
 })
 
+
 // Create an event listener for messages
-client.on('message', message => {
-  // If the message is "ping"
+client.on('message', (message) => {
+  console.log(message)
+
   if (message.channel.type != 'text' || message.author.bot || !message.content.startsWith('$'))
     return;
-  
+	
   let command = message.content.split(' ')[0].slice(1);
-
+  
   let args = message.content.replace('$' + command, '').trim();
   
 
@@ -73,8 +78,8 @@ client.on('message', message => {
     }
 
     case 'give': {
-      if(message.author.id == 316258648185765888){
-        message.channel.send('Hey Scott! I\'ll add that star right now!');
+      if(message.author.id != 316258648185765888){
+        message.channel.send('Hey ' + message.author.toString() + '! I\'ll add that star right now!');
         console.log(command);
         let person = message.content.replace('$' + command, '').trim();
         console.log(person);
@@ -113,7 +118,7 @@ client.on('message', message => {
         
       }
       else{
-        message.channel.send('NO! YOU ARE NOT SCOTT')
+        message.channel.send('NO SCOTT')
       }
       break;
     }
@@ -195,5 +200,4 @@ client.on('message', message => {
   }
 });
 
-// Log our bot in
-client.login(token);
+client.login(process.env.DISCORD_TOKEN)
