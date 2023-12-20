@@ -2,7 +2,7 @@ require('dotenv').config();
 const fs = require('fs')
 
 // Import the discord.js module
-const {Client, Intents} = require('discord.js');
+const {Client, Intents, EmbedBuilder} = require('discord.js');
 
 
 // Create an instance of a Discord client
@@ -164,7 +164,7 @@ client.on('message', (message) => {
       message.delete({timeout: 1000})
       let commands = message.content.replace('$' + command, '').trim().match(/\w+|"[^"]+"/g);
       const channel = message.guild.channels.cache.find(ch => ch.name === "general");
-      const pollEmbed = new Discord.MessageEmbed()
+      const pollEmbed = new EmbedBuilder()
         .setColor('#B000B5');
       
       let title = commands[0]
