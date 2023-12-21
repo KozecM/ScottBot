@@ -2,22 +2,23 @@ require('dotenv').config();
 const fs = require('fs')
 
 // Import the discord.js module
-const {Client, Intents, EmbedBuilder} = require('discord.js');
+const {Client, EmbedBuilder, GatewayIntentBits, Events} = require('discord.js');
 
 
 // Create an instance of a Discord client
 // This is sometimes called 'bot', but 'client' is prefered
 const client = new Client({
   intents:[
-    Intents.FLAGS.GUILDS, 
-    Intents.FLAGS.GUILD_MESSAGES, 
-    Intents.FLAGS.MESSAGE_CONTENT,
+    GatewayIntentBits.Guilds, 
+    GatewayIntentBits.GuildMessages, 
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMembers,
   ],
 });
 
 // The ready event is vital, it means that your bot will only start reacting to information
 // from Discord after ready is emitted
-client.once("ready", () =>{
+client.once(Events.ClientReady, () =>{
   console.log("I am ready!")
 })
 
@@ -28,17 +29,15 @@ fs.readFile('CurrentStar.txt', 'utf-8', (err, fd) => {
 
 
 // Create an event listener for messages
-client.on('message', (message) => {
-  console.log(message)
+client.on("messageCreate", (message) => {
 
-  if (message.channel.type != 'text' || message.author.bot || !message.content.startsWith('$'))
+  if (message.channel.type != 0 || message.author.bot || !message.content.startsWith('$'))
     return;
 	
   let command = message.content.split(' ')[0].slice(1);
   
   let args = message.content.replace('$' + command, '').trim();
   
-
 
   switch (command) {
     case 'ping':
@@ -80,13 +79,11 @@ client.on('message', (message) => {
     case 'give': {
       if(message.author.id != 316258648185765888){
         message.channel.send('Hey ' + message.author.toString() + '! I\'ll add that star right now!');
-        console.log(command);
-        let person = message.content.replace('$' + command, '').trim();
-        console.log(person);
-        if (person.includes("<@!")) {
-          person = person.split("!")[1].split(">")[0];
-          let user = message.guild.member(person)
-          current_name = user.nickname;
+        let person = message.mentions.members.first();
+        console.log(person.nickname);
+        if (person) {
+          current_name = person.displayName;
+          console.log(current_name);
 
           fs.readFile('CurrentStar.txt', 'utf-8', (err, data) => { 
             if (err) throw err; 
@@ -105,11 +102,12 @@ client.on('message', (message) => {
               
               })
               .catch(err=> {
-                console.log(err);
+                console.log("ERROR: " + err);
               });
 
               current_name += " 🌟"
-              user.setNickname(current_name)
+              console.log(current_name)
+              person.setNickname(current_name)
             }
             
             
@@ -163,7 +161,6 @@ client.on('message', (message) => {
     case 'poll': {
       message.delete({timeout: 1000})
       let commands = message.content.replace('$' + command, '').trim().match(/\w+|"[^"]+"/g);
-      const channel = message.guild.channels.cache.find(ch => ch.name === "general");
       const pollEmbed = new EmbedBuilder()
         .setColor('#B000B5');
       
@@ -178,11 +175,11 @@ client.on('message', (message) => {
         
         temp = ":regional_indicator_"+ String.fromCharCode(letter) + ":";
         var optionString = temp + " " + options[option];
-        pollEmbed.addField(optionString, "\u200b", false);
+        pollEmbed.addFields({name: optionString, value: "\u200b", inline: false});
         num += 1;
       }
       
-      channel.send(pollEmbed)
+      message.channel.send({embeds:[pollEmbed]})
         .then(message => {
           for(i = 0; i<options.length; i ++){
             testEmoji =alphabet[i];
