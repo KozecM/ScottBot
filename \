@@ -20,8 +20,8 @@
   "homepage": "https://github.com/KozecM/ScottBot#readme",
   "dependencies": {
     "discord": "^0.8.2",
-    "discord.js": "^14.14.1",
-    "dotenv": "^16.3.1",
+    "discord.js": "^12.5.3",
+    "dotenv": "^8.6.0",
     "fd": "^0.0.3",
     "fs": "^0.0.1-security",
     "node": "^21.2.0",
