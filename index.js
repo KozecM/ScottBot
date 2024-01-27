@@ -88,14 +88,14 @@ client.on("messageCreate", (message) => {
           fs.readFile('CurrentStar.txt', 'utf-8', (err, data) => { 
             if (err) throw err; 
     
-            if(person != data){
+            if(person.id != data){
               message.guild.members.fetch(data)
               .then(old_user => {
                 console.log(old_user.nickname);
-                old_user_name = old_user.nickname;
+                old_user_name = old_user.displayName;
                 old_user_name = old_user_name.split("🌟")[0];
                 old_user.setNickname(old_user_name);
-                fs.writeFile('CurrentStar.txt', person, (err) => {
+                fs.writeFile('CurrentStar.txt', person.id, (err) => {
                   if (err) throw err;
                   console.log("successfully written")
                 })
@@ -105,7 +105,7 @@ client.on("messageCreate", (message) => {
                 console.log("ERROR: " + err);
               });
 
-              current_name += " 🌟"
+              current_name = current_name + " 🌟"
               console.log(current_name)
               person.setNickname(current_name)
             }
