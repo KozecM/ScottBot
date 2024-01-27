@@ -80,10 +80,8 @@ client.on("messageCreate", (message) => {
       if(message.author.id != 316258648185765888){
         message.channel.send('Hey ' + message.author.toString() + '! I\'ll add that star right now!');
         let person = message.mentions.members.first();
-        console.log(person.nickname);
         if (person) {
           current_name = person.displayName;
-          console.log(current_name);
 
           fs.readFile('CurrentStar.txt', 'utf-8', (err, data) => { 
             if (err) throw err; 
@@ -97,7 +95,7 @@ client.on("messageCreate", (message) => {
                 old_user.setNickname(old_user_name);
                 fs.writeFile('CurrentStar.txt', person.id, (err) => {
                   if (err) throw err;
-                  console.log("successfully written")
+                  console.log("successfully wrote " + person.nickname + " to file.")
                 })
               
               })
@@ -106,7 +104,6 @@ client.on("messageCreate", (message) => {
               });
 
               current_name = current_name + " 🌟"
-              console.log(current_name)
               person.setNickname(current_name)
             }
             
