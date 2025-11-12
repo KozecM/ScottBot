@@ -61,16 +61,14 @@ client.on("messageCreate", (message) => {
     }
 
     case 'help': {
-      if(message.author.id == 316258648185765888){
-        message.channel.send('Scott does not get to know the rules');
-      }
       else{
-        response = "```Welcome to help not scott! Here are all of the commands that you need to use me:" + 
+        response = "```Welcome to help! Here are all of the commands that you need to use me:" + 
           "\n$ping: respond pong \n$pong: respond ping"+
           "\n$say: respond with any text after the command"+
           "\n$give: give a star (only scott can give a star)"+
-          "\n$poll: start a poll takes the arguments: \"title\" \"option 1\" \"option 2\" \"option 3\""
-          "\n$99: random 99 quote```"
+          "\n$poll: start a poll takes the arguments: \"title\" \"option 1\" \"option 2\" \"option 3\""+
+          "\n$99: random 99 quote```"+
+          "\n$game?: Determines if we should game"
         message.channel.send(response)
       }
       break;
@@ -193,5 +191,51 @@ client.on("messageCreate", (message) => {
     }
   }
 });
+
+
+//Level tracker
+client.on("messageCreate", (message) => {
+  //Pulling json data
+  const levelData = fs.readFileSync('levels.json');
+  const jsonLevelData = JSON.parse(levelData)
+
+  //calculate points and time
+  const pointsToGive = Math.floor(Math.random() * (25 - 15 + 1) + 15)
+  const currentTime = Date.now()
+
+  if !(jsonLevelData.users.some(item => item.id === message.author.id)):
+    jsonLevelData.users.push({
+      message.author.id.toString() : {
+        id: message.author.id,
+        points: points,
+        time: currentTime,
+        level: 0
+      },
+    })
+
+  else{
+    const currentUser = jsonLevelData.users[message.author.id.toString()]
+    let newPoints = currentUser.points
+    const oldTime = currentUser.time
+    let level = currentUser.level
+
+
+
+    if (currentTime - oldTime > 60000){
+      newPoints += pointsToGive
+
+      if (level == 0 && newPoints > 100) || (level > 0 && newPoints > ((level-1)/2 x (55 + ((level-2) x 10 +55)) + 100)):
+        level ++
+        message.channel.send('HEHEHE I CONTROL THE LEVELS NOW! Congrats ' + message.author.toString() + 'you are now the prestigious level' + level + '!'
+          
+      jsonLevelData.users[message.author.id.toString().push({
+        points: newPoints,
+        time:currentTime,
+        level:level
+      })
+    }
+
+  }
+}
 
 client.login(process.env.DISCORD_TOKEN)
