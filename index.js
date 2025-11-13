@@ -67,7 +67,7 @@ client.on("messageCreate", (message) => {
         "\n$give: give a star (only scott can give a star)"+
         "\n$poll: start a poll takes the arguments: \"title\" \"option 1\" \"option 2\" \"option 3\""+
         "\n$99: random 99 quote```"+
-        "\n$game?: Determines if we should game"
+        "\n$game?: Determines if we should game```"
       message.channel.send(response)
       break;
     }
