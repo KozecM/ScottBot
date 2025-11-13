@@ -201,15 +201,14 @@ client.on("messageCreate", (message) => {
   const pointsToGive = Math.floor(Math.random() * (25 - 15 + 1) + 15)
   const currentTime = Date.now()
 
-  if !(jsonLevelData.users.some(item => item.id === message.author.id)):
-    jsonLevelData.users.push({
-      message.author.id.toString() : {
-        id: message.author.id,
-        points: points,
-        time: currentTime,
-        level: 0
-      },
+  if (!(jsonLevelData.users.some(item => item.id === message.author.id))){
+    jsonLevelData.users[message.author.id.toString()].push({
+      id: message.author.id,
+      points: points,
+      time: currentTime,
+      level: 0
     })
+  }
 
   else{
     const currentUser = jsonLevelData.users[message.author.id.toString()]
@@ -222,18 +221,19 @@ client.on("messageCreate", (message) => {
     if (currentTime - oldTime > 60000){
       newPoints += pointsToGive
 
-      if (level == 0 && newPoints > 100) || (level > 0 && newPoints > ((level-1)/2 x (55 + ((level-2) x 10 +55)) + 100)):
+      if ((level == 0 && newPoints > 100) || (level > 0 && newPoints > ((level-1)/2 * (55 + ((level-2) * 10 +55)) + 100))){
         level ++
-        message.channel.send('HEHEHE I CONTROL THE LEVELS NOW! Congrats ' + message.author.toString() + 'you are now the prestigious level' + level + '!'
+        message.channel.send('HEHEHE I, SCOTTBOT CONTROL THE LEVELS NOW! Congrats ' + message.author.toString() + 'you are now the prestigious level' + level + '!')
+      }
           
-      jsonLevelData.users[message.author.id.toString().push({
+      jsonLevelData.users[message.author.id.toString()].push({
         points: newPoints,
         time:currentTime,
         level:level
       })
     }
-
   }
+  fs.writeFileSync('data.json', JSON.stringify(jsonLevelData));
 }
 
 client.login(process.env.DISCORD_TOKEN)
