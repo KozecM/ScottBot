@@ -74,7 +74,7 @@ client.on("messageCreate", (message) => {
 
     case 'give': {
       if(message.author.id != 316258648185765888){
-        message.channel.send('Hey ' + message.author.toString() + '! I\'ll add that star right now!');
+        message.channel.send('Hey ' + message.author.toString() + '! I\'ll try to add that star right now!');
         let person = message.mentions.members.first();
         if (person) {
           current_name = person.displayName;
@@ -82,7 +82,7 @@ client.on("messageCreate", (message) => {
           fs.readFile('CurrentStar.txt', 'utf-8', (err, data) => { 
             if (err) throw err; 
     
-            if(person.id != data){
+            if((person.id != data) && (message.author.id != data)){
               message.guild.members.fetch(data)
               .then(old_user => {
                 console.log(old_user.nickname);
@@ -222,14 +222,15 @@ client.on("messageCreate", (message) => {
       
       if (currentTime - oldTime > 60000){
         newPoints += pointsToGive
+	currentUser.points = newPoints;
+	currentUser.time = currentTime;
 
+	//Update level and notify      
         if ((level == 0 && newPoints > 100) || (level > 0 && newPoints > ((level-1)/2 * (55 + ((level-2) * 10 +55)) + 100))){
           currentUser.level = level + 1
-          message.channel.send('HEHEHE I, SCOTTBOT CONTROL THE LEVELS NOW! Congrats ' + message.author.toString() + 'you are now the prestigious level' + level + '!')
+          message.channel.send('HEHEHE I, SCOTTBOT CONTROL THE LEVELS NOW! Congrats ' + message.author.toString() + ' you are now the prestigious level ' + (level+1) + '!')
+	  currentUser.points = 0;
         }
-            
-        currentUser.points = newPoints;
-        currentUser.time = currentTime;
       }
     }
     fs.writeFileSync('levels.json', JSON.stringify(jsonLevelData));
