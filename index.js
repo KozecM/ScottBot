@@ -190,13 +190,6 @@ client.on("messageCreate", (message) => {
   }
 });
 
-let testJson = {"users":[{"<@286300560620257280>":{"userId":286300560620257280,"points":22,"time":1763020831439,"level":0}}]}
-let newJson = testJson.users.find(item => item.hasOwnProperty("<@286300560620257280>"));
-console.log(newJson["<@286300560620257280>"].points);
-newJson["<@286300560620257280>"].points = newJson["<@286300560620257280>"].points + 3
-console.log(JSON.stringify(testJson))
-
-
 //Level tracker
 client.on("messageCreate", (message) => {
   //Pulling json data
