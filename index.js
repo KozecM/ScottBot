@@ -190,50 +190,61 @@ client.on("messageCreate", (message) => {
   }
 });
 
+let testJson = {"users":[{"<@286300560620257280>":{"userId":286300560620257280,"points":22,"time":1763020831439,"level":0}}]}
+let newJson = testJson.users.find(item => item.hasOwnProperty("<@286300560620257280>"));
+console.log(newJson["<@286300560620257280>"].points);
+newJson["<@286300560620257280>"].points = newJson["<@286300560620257280>"].points + 3
+console.log(JSON.stringify(testJson))
+
 
 //Level tracker
 client.on("messageCreate", (message) => {
   //Pulling json data
   const levelData = fs.readFileSync('levels.json');
-  const jsonLevelData = JSON.parse(levelData);
+  let jsonLevelData = JSON.parse(levelData);
 
   //calculate points and time
   const pointsToGive = Math.floor(Math.random() * (25 - 15 + 1) + 15);
   const currentTime = Date.now();
+  const userName = message.author.toString()
 
-  if (!(jsonLevelData.users.some(item => item.id === message.author.id))){
-    jsonLevelData.users[message.author.id.toString()].push({
-      id: message.author.id,
-      points: points,
-      time: currentTime,
-      level: 0,
-    })
-  }
-
-  else{
-    const currentUser = jsonLevelData.users[message.author.id.toString()]
-    let newPoints = currentUser.points;
-    const oldTime = currentUser.time;
-    let level = currentUser.level;
-
-
-
-    if (currentTime - oldTime > 60000){
-      newPoints += pointsToGive
-
-      if ((level == 0 && newPoints > 100) || (level > 0 && newPoints > ((level-1)/2 * (55 + ((level-2) * 10 +55)) + 100))){
-        level ++
-        message.channel.send('HEHEHE I, SCOTTBOT CONTROL THE LEVELS NOW! Congrats ' + message.author.toString() + 'you are now the prestigious level' + level + '!')
+  if (userName != "<@791391140406362122>"){
+    if (!(jsonLevelData.users.some(item => item.hasOwnProperty(userName)))){
+      const newUser = {
+        [userName]: {
+          "userId": parseInt(message.author.id),
+          "points": pointsToGive,
+          "time": currentTime,
+          "level": 0,
+        }
       }
-          
-      jsonLevelData.users[message.author.id.toString()].push({
-        points: newPoints,
-        time:currentTime,
-        level:level,
-      })
+      jsonLevelData.users.push(newUser)
+      console.log("added" + jsonLevelData + "to ID" + userName);
+      
     }
+    else{
+      let currentUser = jsonLevelData.users.find(item => item.hasOwnProperty(userName))[userName]
+      let newPoints = currentUser.points;
+      const oldTime = currentUser.time;
+      let level = currentUser.level;
+
+      
+      if (currentTime - oldTime > 60000){
+        newPoints += pointsToGive
+        console.log("here!")
+
+        if ((level == 0 && newPoints > 100) || (level > 0 && newPoints > ((level-1)/2 * (55 + ((level-2) * 10 +55)) + 100))){
+          currentUser.level = level + 1
+          message.channel.send('HEHEHE I, SCOTTBOT CONTROL THE LEVELS NOW! Congrats ' + message.author.toString() + 'you are now the prestigious level' + level + '!')
+        }
+            
+        currentUser.points = newPoints;
+        currentUser.time = currentTime;
+      }
+    }
+    console.log(JSON.stringify(jsonLevelData));
+    fs.writeFileSync('levels.json', JSON.stringify(jsonLevelData));
   }
-  fs.writeFileSync('data.json', JSON.stringify(jsonLevelData))
 });
 
 client.login(process.env.DISCORD_TOKEN)
