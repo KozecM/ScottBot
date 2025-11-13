@@ -212,7 +212,6 @@ client.on("messageCreate", (message) => {
         }
       }
       jsonLevelData.users.push(newUser)
-      console.log("added" + jsonLevelData + "to ID" + userName);
       
     }
     else{
@@ -220,11 +219,9 @@ client.on("messageCreate", (message) => {
       let newPoints = currentUser.points;
       const oldTime = currentUser.time;
       let level = currentUser.level;
-
       
       if (currentTime - oldTime > 60000){
         newPoints += pointsToGive
-        console.log("here!")
 
         if ((level == 0 && newPoints > 100) || (level > 0 && newPoints > ((level-1)/2 * (55 + ((level-2) * 10 +55)) + 100))){
           currentUser.level = level + 1
@@ -235,7 +232,6 @@ client.on("messageCreate", (message) => {
         currentUser.time = currentTime;
       }
     }
-    console.log(JSON.stringify(jsonLevelData));
     fs.writeFileSync('levels.json', JSON.stringify(jsonLevelData));
   }
 });
