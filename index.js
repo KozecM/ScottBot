@@ -157,7 +157,7 @@ client.on("messageCreate", (message) => {
       const pollEmbed = new EmbedBuilder()
         .setColor('#B000B5');
       
-      let title = commands[0]
+      let title = commands[0];
       let options = commands.slice(1);
       let alphabet = ['🇦', '🇧', '🇨', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶'];
 
@@ -195,26 +195,26 @@ client.on("messageCreate", (message) => {
 client.on("messageCreate", (message) => {
   //Pulling json data
   const levelData = fs.readFileSync('levels.json');
-  const jsonLevelData = JSON.parse(levelData)
+  const jsonLevelData = JSON.parse(levelData);
 
   //calculate points and time
-  const pointsToGive = Math.floor(Math.random() * (25 - 15 + 1) + 15)
-  const currentTime = Date.now()
+  const pointsToGive = Math.floor(Math.random() * (25 - 15 + 1) + 15);
+  const currentTime = Date.now();
 
   if (!(jsonLevelData.users.some(item => item.id === message.author.id))){
     jsonLevelData.users[message.author.id.toString()].push({
       id: message.author.id,
       points: points,
       time: currentTime,
-      level: 0
+      level: 0,
     })
   }
 
   else{
     const currentUser = jsonLevelData.users[message.author.id.toString()]
-    let newPoints = currentUser.points
-    const oldTime = currentUser.time
-    let level = currentUser.level
+    let newPoints = currentUser.points;
+    const oldTime = currentUser.time;
+    let level = currentUser.level;
 
 
 
@@ -229,11 +229,11 @@ client.on("messageCreate", (message) => {
       jsonLevelData.users[message.author.id.toString()].push({
         points: newPoints,
         time:currentTime,
-        level:level
+        level:level,
       })
     }
   }
-  fs.writeFileSync('data.json', JSON.stringify(jsonLevelData));
-}
+  fs.writeFileSync('data.json', JSON.stringify(jsonLevelData))
+});
 
 client.login(process.env.DISCORD_TOKEN)
