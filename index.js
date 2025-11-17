@@ -226,7 +226,7 @@ client.on("messageCreate", (message) => {
 	currentUser.time = currentTime;
 
 	//Update level and notify      
-        if ((level == 0 && newPoints > 100) || (level > 0 && newPoints > ((level-1)/2 * (55 + ((level-2) * 10 +55)) + 100))){
+        if ((level == 0 && newPoints > 100) || (level > 0 && newPoints > ((level-1)/2 * (55 + ((level-2) * 10 + 55)) + 100))){
           currentUser.level = level + 1
           message.channel.send('HEHEHE I, SCOTTBOT CONTROL THE LEVELS NOW! Congrats ' + message.author.toString() + ' you are now the prestigious level ' + (level+1) + '!')
 	  currentUser.points = 0;
