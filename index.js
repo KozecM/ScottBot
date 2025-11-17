@@ -222,14 +222,30 @@ client.on("messageCreate", (message) => {
       
       if (currentTime - oldTime > 60000){
         newPoints += pointsToGive
-	currentUser.points = newPoints;
-	currentUser.time = currentTime;
+	      currentUser.points = newPoints;
+	      currentUser.time = currentTime;
 
-	//Update level and notify      
+				//Update level and notify      
         if ((level == 0 && newPoints > 100) || (level > 0 && newPoints > ((level-1)/2 * (55 + ((level-2) * 10 + 55)) + 100))){
           currentUser.level = level + 1
-          message.channel.send('HEHEHE I, SCOTTBOT CONTROL THE LEVELS NOW! Congrats ' + message.author.toString() + ' you are now the prestigious level ' + (level+1) + '!')
-	  currentUser.points = 0;
+          const nameCall = [
+          	"old so and so", 
+          	"codger", 
+          	"twat", 
+          	"talkative mole", 
+          	"Bezos lookin bitch", 
+          	"trash receptacle", 
+          	"borgnobble", 
+          	"goblin", 
+          	"sexy bastard", 
+          	"good lil lad", 
+          	"lamp loving slut", 
+          	"plant", 
+          	"need to hear about your car's extended warranty", 
+          	"blind bat"
+          ]
+          message.channel.send(message.author.toString() + ' you ' + nameCall[Math.floor(Math.random() * nameCall.length)] '! You are now the esteemed level ' + (level+1) + '!')
+					currentUser.points = 0;
         }
       }
     }
