@@ -242,9 +242,10 @@ client.on("messageCreate", (message) => {
           	"lamp loving slut", 
           	"plant", 
           	"need to hear about your car's extended warranty", 
-          	"blind bat"
+          	"blind bat",
           ]
-          message.channel.send(message.author.toString() + ' you ' + nameCall[Math.floor(Math.random() * nameCall.length)] '! You are now the esteemed level ' + (level+1) + '!')
+          const nameLoc = Math.floor(Math.random() * nameCall.length)
+          message.channel.send(message.author.toString() + ' you ' + nameCall[nameLoc] + '! You are now the esteemed level ' + (level+1) + '!')
 					currentUser.points = 0;
         }
       }
