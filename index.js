@@ -184,7 +184,16 @@ client.on("messageCreate", (message) => {
     }
 
   case 'pipe': {
-    const html = (await (await fetch("https://www.portlandoregon.gov/bes/bigpipe/gauge.cfm")).text()); // html as text
+    fetch('https://www.portlandoregon.gov/bes/bigpipe/gauge.cfm').then(function (response) {
+      // The API call was successful!
+      return response.text();
+    }).then(function (html) {
+      // This is the HTML from our response as a text string
+      console.log(html);
+    }).catch(function (err) {
+      // There was an error
+      console.warn('Something went wrong.', err);
+    });
     const doc = new DOMParser().parseFromString(html, 'text/html');
     console.log(doc.body)
   }
