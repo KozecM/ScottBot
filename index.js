@@ -189,13 +189,13 @@ client.on("messageCreate", (message) => {
       return response.text();
     }).then(function (html) {
       // This is the HTML from our response as a text string
-      console.log(html);
+      const re = /<span\s+class="percent__number">(\d+)<\/span>/
+      const pipeLevel = html.match(re)[1]
+      message.channel.send("The big pipe is currently at %" + pipeLevel + "!")
     }).catch(function (err) {
       // There was an error
       console.warn('Something went wrong.', err);
     });
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    console.log(doc.body)
   }
 
 
@@ -259,6 +259,19 @@ client.on("messageCreate", (message) => {
           	"plant", 
           	"need to hear about your car's extended warranty", 
           	"blind bat",
+		"muppet",
+		"dipstick",
+		"are currently stranded on an island with just a knife, a piece of twine, and two kazoos. How do you survive?",
+		"numpty",
+		"carpet",
+		"shelf",
+		"nissan leaf",
+		"sexy bastard you",
+		"nerd",
+		"gamer",
+		"flatulent fish",
+		"great big bag-o-slippers",
+		"dirty dawg",
           ]
           const nameLoc = Math.floor(Math.random() * nameCall.length)
           message.channel.send(message.author.toString() + ' you ' + nameCall[nameLoc] + '! You are now the esteemed level ' + (level+1) + '!')
