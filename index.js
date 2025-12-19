@@ -183,6 +183,13 @@ client.on("messageCreate", (message) => {
         break;
     }
 
+  case 'pipe': {
+    const html = (await (await fetch("https://www.portlandoregon.gov/bes/bigpipe/gauge.cfm")).text()); // html as text
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    console.log(doc.body)
+  }
+
+
     case 'test': {
       console.log("test place")
       break;
